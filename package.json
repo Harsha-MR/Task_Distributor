@@ -1,0 +1,12 @@
+{
+  "name": "mern-task-manager-root",
+  "version": "1.0.0",
+  "description": "Root package for MERN Task Manager",
+  "scripts": {
+    "start": "concurrently \"cd backend && npm start\" \"cd frontend && npm run dev\"",
+    "install-all": "npm install && cd frontend && npm install && cd ../backend && npm install"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+} 
