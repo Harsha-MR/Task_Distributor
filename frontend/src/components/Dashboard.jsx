@@ -126,8 +126,8 @@ function Dashboard() {
   return (
     <div className="h-screen flex flex-col">
       {/* Top Navigation Bar */}
-      <div className="bg-white dark:bg-gray-800 shadow-md z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="fixed top-0 left-0 right-0 bg-white dark:bg-gray-800 shadow-md z-10">
+        <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
               <button
@@ -136,11 +136,16 @@ function Dashboard() {
               >
                 <Menu className="h-6 w-6" />
               </button>
-              <h1 className="ml-4 text-xl font-semibold text-gray-900 dark:text-white">Dashboard</h1>
+              <h1 className="ml-4 text-xl font-semibold text-gray-900 dark:text-white">Tasks Ditribution System</h1>
             </div>
             <div className="flex items-center space-x-4">
-              
-              <div className="relative">
+              {/* <button
+                onClick={toggleDarkMode}
+                className="p-2 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+              >
+                {darkMode ? <Sun className="h-6 w-6" /> : <Moon className="h-6 w-6" />}
+              </button> */}
+              {/* <div className="relative">
                 <button
                   onClick={() => setShowNotifications(!showNotifications)}
                   className="p-2 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
@@ -152,14 +157,14 @@ function Dashboard() {
                     </span>
                   )}
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
       </div>
 
       {/* Main Content Area with Sidebar */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden mt-16">
         {/* Sidebar */}
         <div className={`fixed inset-y-0 left-0 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 transition duration-200 ease-in-out z-20 w-64 bg-white dark:bg-gray-800 shadow-lg`}>
           <div className="flex flex-col h-full">
