@@ -5,11 +5,11 @@ import Agent from "../models/Agent.js";
 
 const router = express.Router();
 
-// Get all agents with count
+// Get all agents with count for the current admin
 router.get('/', protect, async (req, res) => {
   try {
-    const agents = await Agent.find().sort({ createdAt: -1 });
-    const totalAgents = await Agent.countDocuments();
+    const agents = await Agent.find({ adminId: req.user._id }).sort({ createdAt: -1 });
+    const totalAgents = await Agent.countDocuments({ adminId: req.user._id });
     
     res.json({
       success: true,
@@ -36,22 +36,24 @@ router.put('/:id', protect, async (req, res) => {
   try {
     const { name, email, mobile, status } = req.body;
     
-    // Check if email is being changed and if it already exists
+    // Check if email is being changed and if it already exists for this admin
     if (email) {
       const existingAgent = await Agent.findOne({ 
         email, 
+        adminId: req.user._id,
         _id: { $ne: req.params.id } 
       });
       if (existingAgent) {
         return res.status(400).json({ 
           success: false, 
-          message: 'Agent with this email already exists' 
+          message: 'Agent with this email already exists under your admin account' 
         });
       }
     }
 
-    const agent = await Agent.findByIdAndUpdate(
-      req.params.id,
+    // Update only if the agent belongs to the current admin
+    const agent = await Agent.findOneAndUpdate(
+      { _id: req.params.id, adminId: req.user._id },
       { name, email, mobile, status },
       { new: true, runValidators: true }
     );
@@ -59,12 +61,12 @@ router.put('/:id', protect, async (req, res) => {
     if (!agent) {
       return res.status(404).json({ 
         success: false, 
-        message: 'Agent not found' 
+        message: 'Agent not found or you do not have permission to update this agent' 
       });
     }
 
-    // Get updated count
-    const totalAgents = await Agent.countDocuments();
+    // Get updated count for this admin
+    const totalAgents = await Agent.countDocuments({ adminId: req.user._id });
     
     res.json({
       success: true,
@@ -87,17 +89,21 @@ router.put('/:id', protect, async (req, res) => {
 // Delete agent
 router.delete('/:id', protect, async (req, res) => {
   try {
-    const agent = await Agent.findByIdAndDelete(req.params.id);
+    // Delete only if the agent belongs to the current admin
+    const agent = await Agent.findOneAndDelete({ 
+      _id: req.params.id, 
+      adminId: req.user._id 
+    });
 
     if (!agent) {
       return res.status(404).json({ 
         success: false, 
-        message: 'Agent not found' 
+        message: 'Agent not found or you do not have permission to delete this agent' 
       });
     }
 
-    // Get updated count
-    const totalAgents = await Agent.countDocuments();
+    // Get updated count for this admin
+    const totalAgents = await Agent.countDocuments({ adminId: req.user._id });
     
     res.json({
       success: true,

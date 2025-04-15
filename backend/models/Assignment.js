@@ -6,6 +6,11 @@ const assignmentSchema = new mongoose.Schema({
     ref: 'Agent',
     required: true,
   },
+  adminId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Admin',
+    required: true,
+  },
   firstName: {
     type: String,
     required: true,

@@ -12,30 +12,37 @@ export const addAgent = async (req, res) => {
       });
     }
 
-    // Check if agent with email already exists
-    const existingAgent = await Agent.findOne({ email });
+    // Check if agent with email already exists for this admin
+    const existingAgent = await Agent.findOne({ 
+      email,
+      adminId: req.user._id // Only check within the same admin's agents
+    });
     if (existingAgent) {
       return res.status(400).json({
         success: false,
-        message: "An agent with this email already exists"
+        message: "An agent with this email already exists under your admin account"
       });
     }
 
-    // Check if agent with mobile already exists
-    const existingMobile = await Agent.findOne({ mobile });
+    // Check if agent with mobile already exists for this admin
+    const existingMobile = await Agent.findOne({ 
+      mobile,
+      adminId: req.user._id // Only check within the same admin's agents
+    });
     if (existingMobile) {
       return res.status(400).json({
         success: false,
-        message: "An agent with this mobile number already exists"
+        message: "An agent with this mobile number already exists under your admin account"
       });
     }
 
-    // Create new agent
+    // Create new agent with adminId
     const agent = await Agent.create({
       name,
       email,
       mobile,
-      password
+      password,
+      adminId: req.user._id // Associate agent with the current admin
     });
 
     // Return success response without password

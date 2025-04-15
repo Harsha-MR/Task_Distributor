@@ -139,12 +139,7 @@ function Dashboard() {
               <h1 className="ml-4 text-xl font-semibold text-gray-900 dark:text-white">Dashboard</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <button
-                onClick={toggleDarkMode}
-                className="p-2 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-              >
-                {darkMode ? <Sun className="h-6 w-6" /> : <Moon className="h-6 w-6" />}
-              </button>
+              
               <div className="relative">
                 <button
                   onClick={() => setShowNotifications(!showNotifications)}

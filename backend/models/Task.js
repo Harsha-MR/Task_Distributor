@@ -18,6 +18,11 @@ const taskSchema = new mongoose.Schema({
     ref: "Agent",
     required: true,
   },
+  adminId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Admin",
+    required: true,
+  },
   assignedAt: {
     type: Date,
     default: Date.now,
@@ -28,8 +33,12 @@ const taskSchema = new mongoose.Schema({
   },
   completedAt: {
     type: Date,
-  }
+  },
 });
+
+// Add index for better query performance
+taskSchema.index({ adminId: 1, assignedTo: 1 });
+taskSchema.index({ adminId: 1, completed: 1 });
 
 const Task = mongoose.model("Task", taskSchema);
 

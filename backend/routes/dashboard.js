@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Agent = require('../models/Agent');
 const Assignment = require('../models/Assignment');
+const { protect } = require('../middleware/authMiddleware');
 
 // Get dashboard statistics
 router.get('/stats', async (req, res) => {
@@ -21,9 +22,10 @@ router.get('/stats', async (req, res) => {
 });
 
 // Get all agents with their assignments
-router.get('/agents', async (req, res) => {
+router.get('/agents', protect, async (req, res) => {
   try {
-    const agents = await Agent.find().select('-password');
+    // Only get agents for the current admin
+    const agents = await Agent.find({ adminId: req.user._id }).select('-password');
     const agentsWithAssignments = await Promise.all(
       agents.map(async (agent) => {
         const assignments = await Assignment.find({ agentId: agent._id });
