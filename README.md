@@ -133,6 +133,3 @@ The application will be available at `http://localhost:3000`.
 4. Push to the branch
 5. Create a new Pull Request
 
-## License
-
-This project is licensed under the MIT License. 
